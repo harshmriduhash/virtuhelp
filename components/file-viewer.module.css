@@ -1,0 +1,23 @@
+.fileViewer {
+  /* Any additional styles not covered by Tailwind */
+}
+
+/* Custom scrollbar styles */
+.max-h-60 {
+  scrollbar-width: thin;
+  scrollbar-color: #4a5568 #2d3748;
+}
+
+.max-h-60::-webkit-scrollbar {
+  width: 8px;
+}
+
+.max-h-60::-webkit-scrollbar-track {
+  background: #2d3748;
+}
+
+.max-h-60::-webkit-scrollbar-thumb {
+  background-color: #4a5568;
+  border-radius: 4px;
+  border: 2px solid #2d3748;
+}

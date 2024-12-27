@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  role          String    @default("user")
+  subscription  Subscription?
+  usage         Usage[]
+}
+
+model Subscription {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status              String   // ACTIVE, SUSPENDED, CANCELLED
+  plan                String   // FREE, PROFESSIONAL, ENTERPRISE
+  price               Int      @default(0) // in cents
+  questionsLimit      Int      @default(20)
+  documentsLimit      Int      @default(3)
+  questionsUsed       Int      @default(0)
+  documentsUsed       Int      @default(0)
+  currentPeriodStart  DateTime @default(now())
+  currentPeriodEnd    DateTime @default(dbgenerated("NOW() + interval '30 days'"))
+  validUntil          DateTime @default(dbgenerated("NOW() + interval '30 days'"))
+  cancelAtPeriodEnd   Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([status])
+  @@index([plan])
+}
+
+model Usage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // question, document, api_call
+  metadata  Json?    // Additional usage data
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model OpenAICost {
+  id                  String   @id @default(cuid())
+  totalCost          Float
+  dailyAverage       Float
+  projectedMonthlyCost Float
+  costsByType        Json     // Breakdown by line item
+  rawData            Json     // Full response from OpenAI
+  timestamp          DateTime @default(now())
+
+  @@index([timestamp])
+}
