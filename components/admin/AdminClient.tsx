@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Building2,
   LayoutDashboard,
@@ -14,77 +14,77 @@ import {
   Bell,
   ChevronDown,
   Search,
-} from "lucide-react"
-import { SettingsModel } from "../SettingsModel"
-import EditAssistantCard from "../EditAssistantCard"
-import FileViewer from "../file-viewer"
-import DashboardOverview from "@/components/DashboardOverview"
-import UserManagement from "@/components/UserManagement"
+} from "lucide-react";
+import { SettingsModel } from "../SettingsModel";
+import EditAssistantCard from "../EditAssistantCard";
+import FileViewer from "../file-viewer";
+import DashboardOverview from "@/components/DashboardOverview";
+import UserManagement from "@/components/UserManagement";
 
 interface AdminClientProps {
-  initialData?: any
+  initialData?: any;
 }
 
 export default function AdminClient({ initialData }: AdminClientProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [loginError, setLoginError] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [activeTab, setActiveTab] = useState("dashboard")
-  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loginError, setLoginError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const router = useRouter();
 
   useEffect(() => {
     // Check authentication status
     const checkAuth = async () => {
       try {
-        const response = await fetch("/api/auth/check")
+        const response = await fetch("/api/auth/check");
         if (response.ok) {
-          setIsAuthenticated(true)
+          setIsAuthenticated(true);
         }
       } catch (error) {
-        console.error("Auth check failed:", error)
+        console.error("Auth check failed:", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
-    checkAuth()
-  }, [])
+    };
+    checkAuth();
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-      })
+      });
       if (response.ok) {
-        setIsAuthenticated(true)
-        setLoginError("")
+        setIsAuthenticated(true);
+        setLoginError("");
       } else {
-        setLoginError("Invalid credentials")
+        setLoginError("Invalid credentials");
       }
     } catch (error) {
-      setLoginError("Login failed")
+      setLoginError("Login failed");
     }
-  }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return <DashboardOverview />
+        return <DashboardOverview />;
       case "users":
-        return <UserManagement />
+        return <UserManagement />;
       case "files":
-        return <FileViewer />
+        return <FileViewer />;
       default:
-        return <DashboardOverview />
+        return <DashboardOverview />;
     }
-  }
+  };
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   if (!isAuthenticated) {
@@ -123,7 +123,7 @@ export default function AdminClient({ initialData }: AdminClientProps) {
           </form>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -200,5 +200,5 @@ export default function AdminClient({ initialData }: AdminClientProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
