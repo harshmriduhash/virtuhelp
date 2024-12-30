@@ -6,16 +6,16 @@ async function createTestUser() {
     const hashedPassword = await bcrypt.hash("test123", 10);
 
     const user = await db.user.upsert({
-      where: { email: "raheesahmed25621@gmail.com" },
+      where: { email: "harshsahay2709@gmail.com" },
       update: {
         hashedPassword,
         name: "Rahees Ahmed",
-        role: "USER",
+        role: "Harsh Sahay",
       },
       create: {
-        email: "raheesahmed25621@gmail.com",
+        email: "harshsahay2709@gmail.com",
         hashedPassword,
-        name: "Rahees Ahmed",
+        name: "Harsh",
         role: "USER",
       },
     });
