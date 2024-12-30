@@ -1,28 +1,31 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
 interface ClientWrapperProps {
-  children: React.ReactNode
-  onAction?: (data: any) => Promise<void>
+  children: React.ReactNode;
+  onAction?: (data: any) => Promise<void>;
 }
 
-export default function ClientWrapper({ children, onAction }: ClientWrapperProps) {
-  const [isLoading, setIsLoading] = useState(false)
+export default function ClientWrapper({
+  children,
+  onAction,
+}: ClientWrapperProps) {
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAction = async (data: any) => {
-    if (!onAction) return
-    setIsLoading(true)
+    if (!onAction) return;
+    setIsLoading(true);
     try {
-      await onAction(data)
+      await onAction(data);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <div className={isLoading ? 'opacity-50 pointer-events-none' : ''}>
+    <div className={isLoading ? "opacity-50 pointer-events-none" : ""}>
       {children}
     </div>
-  )
+  );
 }
